@@ -71,6 +71,12 @@ class NifiFlowBuilder {
     this
   }
 
+  def setNodeRunSchedule(nodeName: String, runSchedule: Long): NifiFlowBuilder = {
+    val node = getNodeOrThrowExceptionIfNotExists(nodeName)
+    node.setRunSchedule(runSchedule)
+    this
+  }
+
   def addConnection(from: String, to: String, relation: Relationship): NifiFlowBuilder = {
     addConnection(from, to, relation.getName)
   }

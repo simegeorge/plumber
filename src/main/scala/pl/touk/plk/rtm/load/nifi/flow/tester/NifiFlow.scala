@@ -106,6 +106,7 @@ private[tester] final class Node(val name: String, val processor: Processor, var
   private val wasRan = new AtomicBoolean(false)
   private var alreadyReturned: Set[Long] = Set()
   private val queueCounter: AtomicInteger = new AtomicInteger(0)
+  private var runSchedule: Option[Long] = None
 
   def setVariable(name: String, value: String): Unit = {
     runner.setVariable(name, value)
@@ -117,6 +118,10 @@ private[tester] final class Node(val name: String, val processor: Processor, var
 
   def setValidateExpressions(validateExpressions: Boolean): Unit = {
     this.validateExpressions = validateExpressions
+  }
+
+  def setRunSchedule(runSchedule: Long): Unit = {
+    this.runSchedule = Some(runSchedule)
   }
 
   def isQueueEmpty: Boolean = {
@@ -188,6 +193,8 @@ private[tester] final class Node(val name: String, val processor: Processor, var
   def initRunner(controllerServices: List[Service]): TestRunner ={
     this.runner = newTestRunner(processor)
     runner.setValidateExpressionUsage(validateExpressions)
+    if ( this.runSchedule.isDefined )
+      runner.setRunSchedule( this.runSchedule.get )
     properties.foreach {
       case (key, null) =>
         runner.removeProperty(key)
