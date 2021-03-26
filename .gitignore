@@ -4,3 +4,10 @@ target/
 
 # Ignore Mac DS_Store files
 .DS_Store
+
+# Metals and VSCode
+.metals/
+**/.bloop
+.bsp/
+metals.sbt
+.vscode

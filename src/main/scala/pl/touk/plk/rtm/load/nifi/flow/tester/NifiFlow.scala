@@ -196,6 +196,20 @@ private[tester] final class Node(val name: String, val processor: Processor, var
     }
     controllerServices.foreach(c => {
       runner.addControllerService(c.name, c.service)
+
+      // The test runner will have already called initialize() on the controller service but if this service
+      // is KeytabCredentialsService then it needs a Kerberos file (e.g. "/etc/krb5.conf") which is defined 
+      // in ControllerServiceInitializationContext.  This means we need to call initialize() again.
+      // We wouldn't need to do this if this was a simple property read by KeytabCredentialsService.
+      if ( ! c.kerberosFile.isEmpty ) {
+        import java.io.File
+        import org.apache.nifi.util.MockControllerServiceInitializationContext
+        val context = new MockControllerServiceInitializationContext( c.service, c.service.getIdentifier ) {
+            override def getKerberosConfigurationFile = new File( c.kerberosFile )
+        }
+        c.service.initialize( context )
+      }
+
       // niektóre service'y mają metodę "onPropertyModified" która zapewne jest wołana kiedy z GUI użytkownik zmieni
       // wartość, więc ustawiamy je w ten sposób jak poniżej zamiast przekazać mapę parametrów do metody addControllerService
       c.properties.foreach{
@@ -208,7 +222,7 @@ private[tester] final class Node(val name: String, val processor: Processor, var
 }
 private[tester] final class Connection(val id: String, val from: String, val to: String, val relation: String, var queue: List[MockFlowFile] = List())
 
-private[tester] final class Service(val name: String, val service: ControllerService, val properties: Map[String, String])
+private[tester] final class Service(val name: String, val service: ControllerService, val properties: Map[String, String], val kerberosFile: String = "")
 
 object FlowFile{
   def apply(data: String, attributes: Map[String, String] = Map.empty[String, String]): FlowFile = new FlowFile(data, attributes)

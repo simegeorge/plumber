@@ -152,12 +152,16 @@ class NifiFlowBuilder {
     }
   }
 
-  def addControllerService(name: String, controllerService: ControllerService, properties: Map[String, String]): NifiFlowBuilder = {
+  def addControllerService(name: String, controllerService: ControllerService, properties: Map[String, String], kerberosFile: String): NifiFlowBuilder = {
     if (services.exists(_.name == name)) {
       throw new IllegalArgumentException(s"Service with name: $name already exists")
     }
-    services += new Service(name, controllerService, properties)
+    services += new Service(name, controllerService, properties, kerberosFile)
     this
+  }
+
+  def addControllerService(name: String, controllerService: ControllerService, properties: Map[String, String]): NifiFlowBuilder = {
+    addControllerService(name, controllerService, properties, "")
   }
 
   def build(): NifiFlow = {
