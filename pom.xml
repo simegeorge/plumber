@@ -7,14 +7,16 @@
 
     <groupId>pl.touk</groupId>
     <artifactId>plumber</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <properties>
-        <nifi.version>1.11.4</nifi.version>
-        <scala.api.version>2.11</scala.api.version>
-        <scala.version>${scala.api.version}.12</scala.version>
+        <!-- <nifi.version>1.11.4</nifi.version> -->
+        <nifi.version>1.9.0</nifi.version>
+        <scala.api.version>2.12</scala.api.version>
+        <scala.version>${scala.api.version}.13</scala.version>
         <scalatest.version>3.0.8</scalatest.version>
         <sl4j.version>1.7.25</sl4j.version>
+        <jar.finalName>${project.artifactId}_${scala.api.version}-${project.version}</jar.finalName>
     </properties>
 
 
