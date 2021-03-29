@@ -7,7 +7,7 @@
 
     <groupId>pl.touk</groupId>
     <artifactId>plumber</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
 
     <properties>
         <!-- <nifi.version>1.11.4</nifi.version> -->

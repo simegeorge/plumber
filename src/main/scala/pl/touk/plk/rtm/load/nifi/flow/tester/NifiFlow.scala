@@ -99,6 +99,8 @@ class NifiFlow(private val nodes: List[Node], private val connections: List[Conn
     println(s"${node.name}\tin=${node.getInputCount} out=${node.processor.getRelationships.map(_.getName).map(node.getFromRelationCount).sum}")
   }
 
+  def getService( name: String ): Option[ControllerService] =
+    this.services.find( s => s.name == name ).map( _.service )
 }
 
 private[tester] final class Node(val name: String, val processor: Processor, var properties: Map[String, String], var validateExpressions: Boolean) {
